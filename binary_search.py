@@ -51,11 +51,11 @@ def delete_tree_element(tree, element):
                     'left_child') is None:
                 tree.pop('root')
                 return
-            if tree.get('right_child') is None and tree.get(
+            elif tree.get('right_child') is None and tree.get(
                     'left_child') is not None:
                 tree = tree['left_child']
                 return
-            if tree.get('right_child') is not None and tree.get(
+            elif tree.get('right_child') is not None and tree.get(
                     'left_child') is None:
                 tree = tree['right_child']
                 return
