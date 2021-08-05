@@ -3,6 +3,8 @@
 # Если элемент присутствует, то сравниваем с ним
 # Если новый элемент меньше, то добавляем в ребенка слева
 # Если новый элемент больше, то добавляем в ребенка справа
+import copy
+
 
 def make_bin_tree():
     dic = {}
@@ -51,25 +53,39 @@ def delete_tree_element(tree, element):
                     'left_child') is None:
                 tree.pop('root')
                 return
-            elif tree.get('right_child') is None and tree.get(
+            if tree.get('right_child') is None and tree.get(
                     'left_child') is not None:
-                tree = tree['left_child']
+                new_tree = copy.deepcopy(tree['left_child'])
+                tree['root'] = new_tree['root']
+                if new_tree.get('left_child') is not None:
+                    tree['left_child'] = new_tree['left_child']
+                if new_tree.get('right_child') is not None:
+                    tree['right_child'] = new_tree['right_child']
                 return
-            elif tree.get('right_child') is not None and tree.get(
+            if tree.get('right_child') is not None and tree.get(
                     'left_child') is None:
-                tree = tree['right_child']
+                new_tree = copy.deepcopy(tree['right_child'])
+                tree['root'] = new_tree['root']
+                if new_tree.get('left_child') is not None:
+                    tree['left_child'] = new_tree['left_child']
+                if new_tree.get('right_child') is not None:
+                    tree['right_child'] = new_tree['right_child']
                 return
-            else:
+            if tree.get('right_child') is not None and tree.get(
+                    'left_child') is not None:
                 tree['root'] = pop_min_element(tree['right_child'])
+                return
         else:
             if element >= tree['root'] and 'right_child' in tree:
                 delete_tree_element(tree['right_child'], element)
+                return
             if element < tree['root'] and 'left_child' in tree:
-                delete_tree_element(tree['right_child'], element)
+                delete_tree_element(tree['left_child'], element)
 
 
 def pop_min_element(tree):
     if 'left_child' not in tree:
         element = tree['root']
+        tree.pop('root')
         return element
     return pop_min_element(tree['left_child'])
